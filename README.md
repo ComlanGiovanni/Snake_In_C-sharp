@@ -2,9 +2,10 @@
 Simple Snake Game in C# - Made With Visual Studio
 
 # Test the snake game in 
-Snake/bin/Debug/Snake.exe
+Exe/Snake.exe
+<strong>No keylogger inside :^)</strong>
 
-Game is Build on Windows
+The exe is Build on Windows
 
 Build it yourself if u are in linux or mac
 
