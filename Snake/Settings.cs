@@ -24,16 +24,16 @@ namespace Snake
         public static bool gameOver { get; set; }
         public static Direction direction { get; set; }
 
-        //
+        //Settings of the game
         public Settings()
         {
-            width = 16;
-            height = 16;
-            speed = 16;
+            width = 20;//in pixel
+            height = 20;//"
+            speed = 20;
             score = 0;
-            points = 1;
+            points = 10;
             gameOver = false;
-            direction = Direction.Down; 
+            direction = Direction.Right; 
         }
     }
 }

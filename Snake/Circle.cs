@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace Snake
 {
-    class Circle
+    class CircleFood
     {
+        //location X and Y
         public int X { get; set; }
-        public int Y { get; set; }
+        public int Y { get; set; }//Acces in other class
 
-        public Circle ()
+        //constructor
+        public CircleFood ()
         {
             X = 0;
             Y = 0;

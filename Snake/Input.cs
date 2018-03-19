@@ -9,7 +9,7 @@ namespace Snake
         public static Hashtable keyTable = new Hashtable();
         
         //check if a button is pressed
-        public static bool keyPressed(Keys key)
+        public static bool keyIsPressed(Keys key)
         {
             if (keyTable[key] == null)
             {

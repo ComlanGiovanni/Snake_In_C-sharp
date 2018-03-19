@@ -1,29 +1,27 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing;//Brush
 using System.Windows.Forms;
 
 namespace Snake
 {
+
     public partial class Form1 : Form
     {
-        private List<Circle> Snake = new List<Circle>();
-        private Circle food = new Circle();
+        
+        private List<CircleFood> Snake = new List<CircleFood>();
+        private CircleFood food = new CircleFood();
 
-        // Rest the setting and rest of the time
         public Form1()
         {
             InitializeComponent();
 
+            //Reset the setting
             new Settings();
 
-            gTimer.Interval = 1000/Settings.speed;
-            //gTimer.Tick += updateScreen();
+            //Speed of the game
+            gTimer.Interval = 1000 / Settings.speed;
+            gTimer.Tick += UpdateScreen;
             gTimer.Start();
 
             StartGame();
@@ -31,174 +29,188 @@ namespace Snake
 
         private void StartGame()
         {
-            lblgameover.Visible = false;
-            //throw new NotImplementedException();
+            lblgameover.Visible = false;//hide the game over message
+
+            //Reset the setting
             new Settings();
 
-            //New player
+            //New snake Object
             Snake.Clear();
-            Circle head = new Circle();
-            head.X = 10;
-            head.Y = 5;
-            Snake.Add(head);
+            CircleFood head = new CircleFood { X = 10, Y = 5 };//Middle of the screen
+            Snake.Add(head);//Create the head of the circle
 
             lblscore.Text = Settings.score.ToString();//0
-
-            GenerateFood();
+            RandomFoodGeneration();
         }
 
-        //Random Food somewhere on the map
-        private void GenerateFood()
+        //Place random food object
+        private void RandomFoodGeneration()
         {
-            //throw new NotImplementedException();
-            int maxXpos = Gcanvas.Size.Width/Settings.width;
-            int maxYpos = Gcanvas.Size.Width/Settings.height;
+            //Map size for prevent out map generation
+            //CAN BE GLOBAL BECAUSE WE USE IT FRENQUENTLY
+            int max_XPosition = Gcanvas.Size.Width / Settings.width;
+            int max_YPosition = Gcanvas.Size.Height / Settings.height;
 
-            Random random = new Random();
-            food = new Circle();
-            food.X = random.Next(0, maxXpos);
-            food.Y = random.Next(0, maxYpos);
+            Random random = new Random();//Declaration of a Random object
+            food = new CircleFood { X = random.Next(0, max_XPosition), Y = random.Next(0, max_YPosition) };
         }
 
-        private void updateScreen(object sender, EventArgs e)    
+        private void UpdateScreen(object sender, EventArgs e)
         {
-            //if not gameover
-            if(Settings.gameOver == true)
+            //Check if the game is not over
+            if (Settings.gameOver)
             {
-                //Start : Entrer
-                if(Input.keyPressed(Keys.Enter))
+                //Entrer is pressed start a new game
+                if (Input.keyIsPressed(Keys.Enter))
                 {
                     StartGame();
                 }
             }
+            //if the player still alive
             else
             {
-                if (Input.keyPressed(Keys.Right) && Settings.direction != Direction.Left)
+                /*
+                 for all direction we check if the new direction is different of the current one
+                 if yes we can go to the new direction
+                 */
+                if (Input.keyIsPressed(Keys.Right) && Settings.direction != Direction.Left)
                     Settings.direction = Direction.Right;
-                else if (Input.keyPressed(Keys.Left) && Settings.direction != Direction.Right)
+                else if (Input.keyIsPressed(Keys.Left) && Settings.direction != Direction.Right)
                     Settings.direction = Direction.Left;
-                else if (Input.keyPressed(Keys.Up) && Settings.direction != Direction.Down)
+                else if (Input.keyIsPressed(Keys.Up) && Settings.direction != Direction.Down)
                     Settings.direction = Direction.Up;
-               else if (Input.keyPressed(Keys.Down) && Settings.direction != Direction.Up)
+                else if (Input.keyIsPressed(Keys.Down) && Settings.direction != Direction.Up)
                     Settings.direction = Direction.Down;
 
-                moveSnake();
+                MoveTheSnakeBody();
             }
 
-            Gcanvas.Invalidate();
-        }
-        
-        private void Gcanvas_Paint(object sender, PaintEventArgs e)
-        {
-            Graphics canvas = e.Graphics;
-            
-            if(!Settings.gameOver)
-            {
-                Brush snakeColour;
+         Gcanvas.Invalidate();//for refresh the map
 
-                for(int i = 0; i< Snake.Count; i++)
+        }
+
+        private void Gcanvas_paint(object sender, PaintEventArgs e)
+        {
+            Graphics canvas = e.Graphics; //Choose the canvas
+
+            if (!Settings.gameOver)
+            {
+                for (int i = 0; i < Snake.Count; i++)
                 {
-                    if (i == 0)
+                    Brush snakeColour;
+
+                    if (i == 0)//the first point is the head
                         snakeColour = Brushes.Black;
                     else
-                        snakeColour = Brushes.Green;
+                        snakeColour = Brushes.White;    //Rest of body
 
-                    canvas.FillEllipse(snakeColour, new Rectangle(Snake[i].X * Settings.width, Snake[i].Y * Settings.height, Settings.width, Settings.height));
+                    //snake
+                    canvas.FillEllipse(snakeColour, new Rectangle(Snake[i].X * Settings.width,Snake[i].Y * Settings.height, Settings.width, Settings.height));
 
-                    canvas.FillEllipse(Brushes.Red, new Rectangle(food.X * Settings.width, Settings.height, Settings.width, Settings.height));
-                     
+
+                    //Food
+                    canvas.FillEllipse(Brushes.Red, new Rectangle(food.X * Settings.width, food.Y * Settings.height, Settings.width, Settings.height));
                 }
             }
             else
             {
-                String msgGameover = " Game over my dude ur score is  : " + Settings.score + "\nEntrer to try again LUL";
-                lblgameover.Text = msgGameover;
-                lblgameover.Visible = true;
+                string gameOver = "GAME OVER \nYour Score is : " + Settings.score + "\nPress Enter to play again";
+                lblgameover.Text = gameOver;
+                lblgameover.Visible = true; //Swow the game over message
             }
         }
 
 
-        private void moveSnake()
+        private void MoveTheSnakeBody()
         {
-            for(int i = Snake.Count -1; i>=0; i++)
+            for (int i = Snake.Count - 1; i >= 0; i--)
             {
-                if(i == 0)
+                if (i == 0)//Start a the head of the snake
                 {
                     switch (Settings.direction)
                     {
                         case Direction.Right:
                             Snake[i].X++;
                             break;
-
                         case Direction.Left:
                             Snake[i].X--;
                             break;
-
                         case Direction.Up:
-                            Snake[i].Y++;
+                            Snake[i].Y--;
                             break;
-
                         case Direction.Down:
                             Snake[i].Y++;
                             break;
-                            
                     }
+                    
+                    int max_XPosition = Gcanvas.Size.Width / Settings.width;
+                    int max_YPosition = Gcanvas.Size.Height / Settings.height;
 
-                    int max_Xpos = Gcanvas.Size.Width / Settings.width;
-                    int max_Ypos = Gcanvas.Size.Width / Settings.height;
-
-                    if (Snake[i].X < 0 || Snake[i].Y < 0 || Snake[i].X >= max_Xpos || Snake[i].Y >= max_Ypos)
+                    //collision with the map limtit
+                    if (Snake[i].X < 0 || Snake[i].Y < 0 || Snake[i].X >= max_XPosition || Snake[i].Y >= max_YPosition)
                     {
-                        //Dead();
+                        Die();
+                        //We can impletment a new fonction for a infinite map
                     }
 
+
+                    //Collission with the snake body
                     for (int j = 1; j < Snake.Count; j++)
                     {
-                        if(Snake[i].X == Snake[j].X && Snake[i].Y == Snake[j].Y)
+                        if (Snake[i].X == Snake[j].X &&
+                           Snake[i].Y == Snake[j].Y)
                         {
-                            //Dead();
+                            Die();
                         }
                     }
 
-                    if(Snake[0].X == food.X && Snake[0].Y == food.Y)
+                    //Collision with the food
+                    if (Snake[0].X == food.X && Snake[0].Y == food.Y)
                     {
-                        Eat();
+                        EatFood();
                     }
+
                 }
                 else
                 {
+                    //Move the rest of the body
                     Snake[i].X = Snake[i - 1].X;
                     Snake[i].Y = Snake[i - 1].Y;
                 }
             }
-
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            Input.ChangeState(e.KeyCode, true);
+            Input.ChangeState(e.KeyCode, true);// button is pressed
         }
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
-            Input.ChangeState(e.KeyCode, false);
+            Input.ChangeState(e.KeyCode, false);// button is not pressed
         }
 
-        private void Dead()
+        private void EatFood()
         {
-            Settings.gameOver = true;
-        }
+            //Add a new circle to the snake body
+            CircleFood circle = new CircleFood
+            {
+                X = Snake[Snake.Count - 1].X,
+                Y = Snake[Snake.Count - 1].Y
+            };
 
-        private void Eat()
-        {
-            Circle food = new Circle();
-            food.X = Snake[Snake.Count - 1].X;
-            food.Y = Snake[Snake.Count - 1].Y;
-
-            Snake.Add(food);
-
+            Snake.Add(circle);
+           //Update and show the score
             Settings.score += Settings.points;
             lblscore.Text = Settings.score.ToString();
+
+            //Generate a new random food on the map
+            RandomFoodGeneration();
+        }
+
+        private void Die()
+        {
+            Settings.gameOver = true;
         }
     }
 }
