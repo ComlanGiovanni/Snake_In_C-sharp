@@ -8,6 +8,15 @@ Game is Build on Windows
 
 Build it yourself if u are in linux or mac
 
+#Feature we can add
+-leaboard 
+-infinite map
+-possibility to modify the settings : speed etc
+-More Food for the snake
+-Obstacle : random wall or ennemie or bad food
+-maps resize etc
+-MORE IDEAAAAA
+
 #Doc
 
 https://www.youtube.com/watch?v=1A1Ni6oLo4w //form
