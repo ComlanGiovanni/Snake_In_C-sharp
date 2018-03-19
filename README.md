@@ -8,7 +8,7 @@ Game is Build on Windows
 
 Build it yourself if u are in linux or mac
 
-#Feature we can add
+# Feature we can add
 -leaboard 
 -infinite map
 -possibility to modify the settings : speed etc
@@ -17,8 +17,16 @@ Build it yourself if u are in linux or mac
 -maps resize etc
 -MORE IDEAAAAA
 
-#Doc
-
+# Doc
+<ul>
+<li><p>https://www.youtube.com/watch?v=1A1Ni6oLo4w //form</p></li>
+<li><p>Magic</p></li>
+<li><p>Magic</p></li>
+<li><p>Magic</p></li>
+<li><p>Magic</p></li>
+<li><p>Magic</p></li>
+<li><p>Magic</p></li>
+</ul>
 https://www.youtube.com/watch?v=1A1Ni6oLo4w //form
 https://www.youtube.com/watch?v=s8YcbwVl-HI //hashtable
 https://www.youtube.com/watch?v=98c200lL-OY //timer
