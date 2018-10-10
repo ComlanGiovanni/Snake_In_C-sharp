@@ -112,7 +112,7 @@ namespace Snake
             }
             else
             {
-                string gameOver = "GAME OVER \nYour Score is : " + Settings.score + "\nPress Enter to play again";
+                string gameOver = "GAME OVER \nYour Score is : " + Settings.score + "\nPress button to play again";
                 lblgameover.Text = gameOver;
                 lblgameover.Visible = true; //Show the game over message
             }
