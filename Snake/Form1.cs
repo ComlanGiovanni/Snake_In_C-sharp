@@ -16,7 +16,7 @@ namespace Snake
         {
             InitializeComponent();
 
-            //Reset the setting
+            //Reset the settings
             new Settings();
 
             //Speed of the game
@@ -86,7 +86,6 @@ namespace Snake
             }
 
          Gcanvas.Invalidate();//for refresh the map
-
         }
 
         private void Gcanvas_paint(object sender, PaintEventArgs e)
