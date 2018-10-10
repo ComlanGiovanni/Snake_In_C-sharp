@@ -19,11 +19,11 @@
         public static Direction direction { get; set; }
 
         //Settings of the game
-        public Settings()
+        public Settings(int selectedSpeed)
         {
             width = 20;//in pixel
             height = 20;//"
-            speed = 20;
+            speed = selectedSpeed; //Default 20
             score = 0;
             points = 10;
             gameOver = false;

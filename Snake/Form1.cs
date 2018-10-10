@@ -15,11 +15,13 @@ namespace Snake
         public Form1()
         {
             InitializeComponent();
+            nmbSpeed.Value = 20;
+        }
 
-            //Reset the settings
-            new Settings();
+        private void btnStart_Click(object sender, EventArgs e)
+        {
+            new Settings((int)nmbSpeed.Value);
 
-            //Speed of the game
             gTimer.Interval = 1000 / Settings.speed;
             gTimer.Tick += UpdateScreen;
             gTimer.Start();
@@ -30,9 +32,6 @@ namespace Snake
         private void StartGame()
         {
             lblgameover.Visible = false;//hide the game over message
-
-            //Reset the setting
-            new Settings();
 
             //New snake Object
             Snake.Clear();
