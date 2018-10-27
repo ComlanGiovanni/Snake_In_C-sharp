@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Snake
+﻿namespace Snake
 {
     public enum Direction
     {
@@ -25,11 +19,11 @@ namespace Snake
         public static Direction direction { get; set; }
 
         //Settings of the game
-        public Settings()
+        public Settings(int selectedSpeed)
         {
             width = 20;//in pixel
             height = 20;//"
-            speed = 20;
+            speed = selectedSpeed; //Default 20
             score = 0;
             points = 10;
             gameOver = false;

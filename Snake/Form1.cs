@@ -15,11 +15,13 @@ namespace Snake
         public Form1()
         {
             InitializeComponent();
+            nmbSpeed.Value = 20;
+        }
 
-            //Reset the setting
-            new Settings();
+        private void btnStart_Click(object sender, EventArgs e)
+        {
+            new Settings((int)nmbSpeed.Value);
 
-            //Speed of the game
             gTimer.Interval = 1000 / Settings.speed;
             gTimer.Tick += UpdateScreen;
             gTimer.Start();
@@ -29,10 +31,7 @@ namespace Snake
 
         private void StartGame()
         {
-            lblgameover.Visible = false;//hide the game over message
-
-            //Reset the setting
-            new Settings();
+            lblgameover.Visible = false;//Hide the game over message
 
             //New snake Object
             Snake.Clear();
@@ -47,7 +46,7 @@ namespace Snake
         private void RandomFoodGeneration()
         {
             //Map size for prevent out map generation
-            //CAN BE GLOBAL BECAUSE WE USE IT FRENQUENTLY
+            //CAN BE GLOBAL BECAUSE WE USE IT FREQUENTLY
             int max_XPosition = Gcanvas.Size.Width / Settings.width;
             int max_YPosition = Gcanvas.Size.Height / Settings.height;
 
@@ -60,17 +59,17 @@ namespace Snake
             //Check if the game is not over
             if (Settings.gameOver)
             {
-                //Entrer is pressed start a new game
+                //Enter is pressed start a new game
                 if (Input.keyIsPressed(Keys.Enter))
                 {
                     StartGame();
                 }
             }
-            //if the player still alive
+            //If the player still alive
             else
             {
                 /*
-                 for all direction we check if the new direction is different of the current one
+                 For all direction we check if the new direction is different of the current one
                  if yes we can go to the new direction
                  */
                 if (Input.keyIsPressed(Keys.Right) && Settings.direction != Direction.Left)
@@ -85,8 +84,7 @@ namespace Snake
                 MoveTheSnakeBody();
             }
 
-         Gcanvas.Invalidate();//for refresh the map
-
+         Gcanvas.Invalidate(); //For refresh the map
         }
 
         private void Gcanvas_paint(object sender, PaintEventArgs e)
@@ -99,12 +97,12 @@ namespace Snake
                 {
                     Brush snakeColour;
 
-                    if (i == 0)//the first point is the head
+                    if (i == 0) //The first point is the head
                         snakeColour = Brushes.Black;
                     else
-                        snakeColour = Brushes.White;    //Rest of body
+                        snakeColour = Brushes.White; //Rest of body
 
-                    //snake
+                    //Snake
                     canvas.FillEllipse(snakeColour, new Rectangle(Snake[i].X * Settings.width,Snake[i].Y * Settings.height, Settings.width, Settings.height));
 
 
@@ -114,18 +112,17 @@ namespace Snake
             }
             else
             {
-                string gameOver = "GAME OVER \nYour Score is : " + Settings.score + "\nPress Enter to play again";
+                string gameOver = "GAME OVER \nYour Score is : " + Settings.score + "\nPress button to play again";
                 lblgameover.Text = gameOver;
-                lblgameover.Visible = true; //Swow the game over message
+                lblgameover.Visible = true; //Show the game over message
             }
         }
-
 
         private void MoveTheSnakeBody()
         {
             for (int i = Snake.Count - 1; i >= 0; i--)
             {
-                if (i == 0)//Start a the head of the snake
+                if (i == 0) //Start a the head of the snake
                 {
                     switch (Settings.direction)
                     {
@@ -146,15 +143,14 @@ namespace Snake
                     int max_XPosition = Gcanvas.Size.Width / Settings.width;
                     int max_YPosition = Gcanvas.Size.Height / Settings.height;
 
-                    //collision with the map limtit
+                    //Collision with the map limit
                     if (Snake[i].X < 0 || Snake[i].Y < 0 || Snake[i].X >= max_XPosition || Snake[i].Y >= max_YPosition)
                     {
                         Die();
-                        //We can impletment a new fonction for a infinite map
+                        //We can implement a new function for an infinite map
                     }
 
-
-                    //Collission with the snake body
+                    //Collision with the snake body
                     for (int j = 1; j < Snake.Count; j++)
                     {
                         if (Snake[i].X == Snake[j].X &&
@@ -169,8 +165,8 @@ namespace Snake
                     {
                         EatFood();
                     }
-
                 }
+
                 else
                 {
                     //Move the rest of the body
@@ -182,12 +178,12 @@ namespace Snake
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            Input.ChangeState(e.KeyCode, true);// button is pressed
+            Input.ChangeState(e.KeyCode, true); //Button is pressed
         }
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
-            Input.ChangeState(e.KeyCode, false);// button is not pressed
+            Input.ChangeState(e.KeyCode, false); //Button is not pressed
         }
 
         private void EatFood()
@@ -200,7 +196,7 @@ namespace Snake
             };
 
             Snake.Add(circle);
-           //Update and show the score
+            //Update and show the score
             Settings.score += Settings.points;
             lblscore.Text = Settings.score.ToString();
 
